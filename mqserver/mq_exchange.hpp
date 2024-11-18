@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <mutex>
 #include <memory>
+#include <cassert>
 
 namespace bitmq {
     //1. 定义交换机类
@@ -95,12 +96,14 @@ namespace bitmq {
                 ss << "'" << exp->getArgs() << "');";
                 return _sql_helper.exec(ss.str(), nullptr, nullptr);
             }
+            //根据交换机名称删除交换机
             void remove(const std::string &name) {
                 std::stringstream ss;
                 ss << "delete from exchange_table where name=";
                 ss << "'" << name << "';";
                 _sql_helper.exec(ss.str(), nullptr, nullptr);
             }
+            //恢复交换机数据
             ExchangeMap recovery() {
                 ExchangeMap result;
                 std::string sql = "select name, type, durable, auto_delete, args from exchange_table;";
