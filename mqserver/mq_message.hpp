@@ -14,6 +14,7 @@ namespace bitmq {
     #define DATAFILE_SUBFIX ".mqd"
     #define TMPFILE_SUBFIX ".mqd.tmp"
     using MessagePtr = std::shared_ptr<bitmq::Message>;
+    //消息数据持久化管理类
     class MessageMapper {
         public:
             MessageMapper(std::string &basedir, const std::string &qname):
@@ -159,9 +160,9 @@ namespace bitmq {
                 return true;
             }
         private:
-            std::string _qname;
-            std::string _datafile;
-            std::string _tmpfile;
+            std::string _qname;//队列名称
+            std::string _datafile;//数据文件
+            std::string _tmpfile;//临时文件
     };
 
     class QueueMessage{
@@ -301,8 +302,8 @@ namespace bitmq {
         private:
             std::mutex _mutex;
             std::string _qname;
-            size_t _valid_count;
-            size_t _total_count;
+            size_t _valid_count;//有效消息数量
+            size_t _total_count;//总体消息数量
             MessageMapper _mapper;
             std::list<MessagePtr> _msgs;//待推送消息
             std::unordered_map<std::string, MessagePtr> _durable_msgs;//持久化消息hash
